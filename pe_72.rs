@@ -13,7 +13,7 @@ impl NumInfo {
 }
 
 fn calc_factors_for_combo(num_info: &NumInfo, bitmask: i32) -> i32{
-    let mut combo_value = -1;
+    let mut combo_value = 1;
     for i in 0..num_info.prime_factors.len() {
         if (bitmask & (1 << i)) != 0 {
             combo_value = -1 * combo_value * num_info.prime_factors[i];
@@ -25,9 +25,9 @@ fn calc_factors_for_combo(num_info: &NumInfo, bitmask: i32) -> i32{
 
 fn calc_common_div(num_info:&NumInfo) -> i32 {
     let mut result = 0;
-    let total_combinations = 1 << (num_info.prime_factors.len());
+    let total_combinations = (1 << (num_info.prime_factors.len()));
 
-    for bitmask in 1..total_combinations {
+    for bitmask in 0..total_combinations {
         result = result + calc_factors_for_combo(&num_info, bitmask);
     }
     result
@@ -36,7 +36,7 @@ fn calc_common_div(num_info:&NumInfo) -> i32 {
 fn main() {
 
     let mut num_infos : Vec<NumInfo> = Vec::new();
-    let lim = 8usize;
+    let lim = 1_000_000usize;
     for i in 0..=lim {
         num_infos.push(NumInfo::new(i as i32));
     }
@@ -44,9 +44,9 @@ fn main() {
     for i in 2usize..=lim {
         if num_infos[i].prime_factors.len() == 0 {
             num_infos[i].prime_factors.push(i as i32);
-            let mut j = i*i;
-            while j < lim {
-                num_infos[i].prime_factors.push(i as i32);
+            let mut j = 2*i;
+            while j <= lim {
+                num_infos[j].prime_factors.push(i as i32);
                 j = j + i;
             }
 
